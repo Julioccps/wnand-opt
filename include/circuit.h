@@ -6,7 +6,8 @@
 
 typedef enum{
 	NODE_NAND,
-	NODE_VAR
+	NODE_VAR,
+	NODE_NULL // For serialization/deserialization
 } node_t;
 
 typedef enum{
@@ -39,5 +40,9 @@ void print_binary(uint64_t n);
 uint64_t get_var_signature(char var_name);
 uint64_t get_truth_signature(struct Node* n);
 struct CircuitMatch* optimize_circuit(struct Node* root);
+void display_circuit(struct Node* n, int indent);
+int save_circuit(const char* filename, struct Node* root);
+struct Node* load_circuit(const char* filename);
+void free_circuit(struct Node* n);
 
 #endif

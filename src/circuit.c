@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// Static prototypes for recursive helpers
+static void _save_circuit_recursive(FILE* fp, struct Node* n);
+static struct Node* _load_circuit_recursive(FILE* fp);
+
 struct Node* make_var(char name){
 	struct Node* n = malloc(sizeof(struct Node));
 	n->type = NODE_VAR;
@@ -105,4 +109,95 @@ struct CircuitMatch* optimize_circuit(struct Node* root){
 		}
 	}
 	return cm;
+}
+
+void display_circuit(struct Node* n, int indent) {
+    if (n == NULL) {
+        return;
+    }
+    for (int i = 0; i < indent; i++) {
+        printf("  "); // 2 spaces per indent level
+    }
+    if (n->type == NODE_VAR) {
+        printf("VAR: %c\n", n->var_name);
+    } else if (n->type == NODE_NAND) {
+        printf("NAND\n");
+        display_circuit(n->left, indent + 1);
+        display_circuit(n->right, indent + 1);
+    }
+}
+
+// Recursive helper to save a circuit node
+static void _save_circuit_recursive(FILE* fp, struct Node* n) {
+    if (n == NULL) {
+        node_t type = NODE_NULL;
+        fwrite(&type, sizeof(node_t), 1, fp);
+        return;
+    }
+
+    fwrite(&(n->type), sizeof(node_t), 1, fp);
+    if (n->type == NODE_VAR) {
+        fwrite(&(n->var_name), sizeof(char), 1, fp);
+    } else if (n->type == NODE_NAND) {
+        _save_circuit_recursive(fp, n->left);
+        _save_circuit_recursive(fp, n->right);
+    }
+}
+
+// Saves a circuit to a file
+int save_circuit(const char* filename, struct Node* root) {
+    FILE* fp = fopen(filename, "wb");
+    if (fp == NULL) {
+        perror("Failed to open file for writing");
+        return -1;
+    }
+    _save_circuit_recursive(fp, root);
+    fclose(fp);
+    return 0;
+}
+
+// Recursive helper to load a circuit node
+static struct Node* _load_circuit_recursive(FILE* fp) {
+    node_t type;
+    if (fread(&type, sizeof(node_t), 1, fp) != 1) {
+        return NULL; // Error or EOF
+    }
+
+    if (type == NODE_NULL) {
+        return NULL;
+    }
+
+    if (type == NODE_VAR) {
+        char var_name;
+        if (fread(&var_name, sizeof(char), 1, fp) != 1) {
+            return NULL; // Error
+        }
+        return make_var(var_name);
+    } else if (type == NODE_NAND) {
+        struct Node* left = _load_circuit_recursive(fp);
+        struct Node* right = _load_circuit_recursive(fp);
+        return make_nand(left, right);
+    }
+    return NULL; // Should not happen
+}
+
+// Loads a circuit from a file
+struct Node* load_circuit(const char* filename) {
+    FILE* fp = fopen(filename, "rb");
+    if (fp == NULL) {
+        perror("Failed to open file for reading");
+        return NULL;
+    }
+    struct Node* root = _load_circuit_recursive(fp);
+    fclose(fp);
+    return root;
+}
+
+void free_circuit(struct Node* n) {
+    if (n == NULL) return;
+    if (n->type == NODE_NAND) {
+        free_circuit(n->left);
+        free_circuit(n->right);
+    }
+    free(n);
 }
