@@ -14,5 +14,6 @@ bin/
 *.exe
 wnandopt
 *.bin.cache/
+.cache/
 *.plist
 compile_commands.json
