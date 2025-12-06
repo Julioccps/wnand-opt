@@ -2,6 +2,12 @@
 
 This project is a C implementation for analyzing and optimizing boolean logic circuits built using NAND gates. It can determine the truth signature of a given circuit and attempt to match it to common logic gates (NOT, NAND, AND, NOR, OR, XNOR, XOR).
 
+## The "What" and "NAND"
+
+The name **W'nAND-Opt** (pronounced "What an Optimizer") comes from its purpose: this project is designed to be a submodule for a compiler of a new esoteric programming language currently in development.
+
+This esoteric language relies on **NAND** as its *only* arithmetic operator. The goal of `wnandopt` is to provide the compiler with the intelligence to recognize high-level patterns (like addition, XOR, etc.) within the raw NAND-based circuits, enabling significant optimizations in the generated code.
+
 ## Project Structure
 
 - `include/`: Contains header files with data structure definitions and function prototypes.
