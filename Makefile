@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude -g
 SRC = src/main.c src/circuit.c
 OBJ = $(SRC:.c=.o)
-TARGET = circuit_optimizer
+TARGET = wnandopt
 
 all: $(TARGET)
 

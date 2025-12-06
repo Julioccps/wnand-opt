@@ -1,4 +1,4 @@
-# C Logic Circuit Analyzer
+# W'nAND-Opt
 
 This project is a C implementation for analyzing and optimizing boolean logic circuits built using NAND gates. It can determine the truth signature of a given circuit and attempt to match it to common logic gates (NOT, NAND, AND, NOR, OR, XNOR, XOR).
 
@@ -16,14 +16,14 @@ To build the executable, navigate to the project root directory and run `make`:
 make
 ```
 
-This will create an executable named `circuit_optimizer` in the project root.
+This will create an executable named `wnandopt` in the project root.
 
 ## Running the Example
 
 After building, you can run the example:
 
 ```bash
-./circuit_optimizer
+./wnandopt
 ```
 
 The example currently constructs a simple XOR circuit and attempts to optimize/identify it.
