@@ -13,4 +13,6 @@ bin/
 *.out
 *.exe
 wnandopt
-*.bin
+*.bin.cache/
+*.plist
+compile_commands.json
