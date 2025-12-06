@@ -12,3 +12,4 @@ build/
 bin/
 *.out
 *.exe
+circuit_optimizer
